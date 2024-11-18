@@ -1,0 +1,817 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={RWorksheet\#5\_group(Lumauag, Animas, Sanceda)},
+  pdfauthor={Matt Andrei Lumauag},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{RWorksheet\#5\_group(Lumauag, Animas, Sanceda)}
+\author{Matt Andrei Lumauag}
+\date{2024-11-11}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{options}\NormalTok{(}\AttributeTok{repos =} \FunctionTok{c}\NormalTok{(}\AttributeTok{CRAN =} \StringTok{"https://cran.rstudio.com/"}\NormalTok{))}
+
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"rvest"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'rvest' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\Matteeuu\AppData\Local\Temp\RtmpSmviPa\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"httr"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'httr' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\Matteeuu\AppData\Local\Temp\RtmpSmviPa\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"httr2"}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'httr2' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\Matteeuu\AppData\Local\Temp\RtmpSmviPa\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"parallelly"}\NormalTok{, }\AttributeTok{type =} \StringTok{"source"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning in install.packages("parallelly", type = "source"): installation of
+## package 'parallelly' had non-zero exit status
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"polite"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'polite' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\Matteeuu\AppData\Local\Temp\RtmpSmviPa\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"kableExtra"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'kableExtra' successfully unpacked and MD5 sums checked
+## 
+## The downloaded binary packages are in
+##  C:\Users\Matteeuu\AppData\Local\Temp\RtmpSmviPa\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{install.packages}\NormalTok{(}\StringTok{"xfun"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## package 'xfun' successfully unpacked and MD5 sums checked
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: cannot remove prior installation of package 'xfun'
+\end{verbatim}
+
+\begin{verbatim}
+## Warning in file.copy(savedcopy, lib, recursive = TRUE): problem copying
+## C:\Users\Matteeuu\AppData\Local\Programs\R\R-4.4.1\library\00LOCK\xfun\libs\x64\xfun.dll
+## to
+## C:\Users\Matteeuu\AppData\Local\Programs\R\R-4.4.1\library\xfun\libs\x64\xfun.dll:
+## Permission denied
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: restored 'xfun'
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## The downloaded binary packages are in
+##  C:\Users\Matteeuu\AppData\Local\Temp\RtmpSmviPa\downloaded_packages
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(rvest)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'rvest' was built under R version 4.4.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(httr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'httr' was built under R version 4.4.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(parallelly)}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Attaching package: 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(polite)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'polite' was built under R version 4.4.2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Specifying the url for desired website to be scraped}
+\NormalTok{url }\OtherTok{\textless{}{-}} \StringTok{\textquotesingle{}https://www.imdb.com/chart/toptv/?ref\_=nv\_tvv\_250\textquotesingle{}}
+\CommentTok{\# asking permission to scrape}
+\NormalTok{session }\OtherTok{\textless{}{-}} \FunctionTok{bow}\NormalTok{(url, }\AttributeTok{user\_agent =} \StringTok{"Educational"}\NormalTok{)}
+\NormalTok{session}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## <polite session> https://www.imdb.com/chart/toptv/?ref_=nv_tvv_250
+##     User-agent: Educational
+##     robots.txt: 35 rules are defined for 3 bots
+##    Crawl delay: 5 sec
+##   The path is scrapable for this user-agent
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# creating objects for the dataset}
+\NormalTok{rank\_title }\OtherTok{\textless{}{-}} \FunctionTok{character}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+\NormalTok{links }\OtherTok{\textless{}{-}} \FunctionTok{character}\NormalTok{(}\DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# title list}
+\NormalTok{title\_list }\OtherTok{\textless{}{-}} \FunctionTok{scrape}\NormalTok{(session) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_nodes}\NormalTok{(}\StringTok{\textquotesingle{}h3.ipc{-}title\_\_text\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+\NormalTok{  html\_text}
+
+\NormalTok{title\_list}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "IMDb Charts"                         "1. Breaking Bad"                    
+##  [3] "2. Planet Earth II"                  "3. Planet Earth"                    
+##  [5] "4. Band of Brothers"                 "5. Chernobyl"                       
+##  [7] "6. The Wire"                         "7. Avatar: The Last Airbender"      
+##  [9] "8. Blue Planet II"                   "9. The Sopranos"                    
+## [11] "10. Cosmos: A Spacetime Odyssey"     "11. Cosmos"                         
+## [13] "12. Our Planet"                      "13. Game of Thrones"                
+## [15] "14. Bluey"                           "15. The World at War"               
+## [17] "16. Fullmetal Alchemist Brotherhood" "17. Rick and Morty"                 
+## [19] "18. Life"                            "19. The Last Dance"                 
+## [21] "20. The Twilight Zone"               "21. The Vietnam War"                
+## [23] "22. Sherlock"                        "23. Attack on Titan"                
+## [25] "24. Batman: The Animated Series"     "25. Arcane"                         
+## [27] "Recently viewed"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{class}\NormalTok{(title\_list)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "character"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{title\_list\_sub }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(title\_list[}\DecValTok{2}\SpecialCharTok{:}\DecValTok{26}\NormalTok{])}
+\FunctionTok{head}\NormalTok{(title\_list\_sub)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      title_list[2:26]
+## 1     1. Breaking Bad
+## 2  2. Planet Earth II
+## 3     3. Planet Earth
+## 4 4. Band of Brothers
+## 5        5. Chernobyl
+## 6         6. The Wire
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{tail}\NormalTok{(title\_list\_sub)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   title_list[2:26]
+## 20           20. The Twilight Zone
+## 21             21. The Vietnam War
+## 22                    22. Sherlock
+## 23             23. Attack on Titan
+## 24 24. Batman: The Animated Series
+## 25                      25. Arcane
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{title\_list\_sub}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                       title_list[2:26]
+## 1                      1. Breaking Bad
+## 2                   2. Planet Earth II
+## 3                      3. Planet Earth
+## 4                  4. Band of Brothers
+## 5                         5. Chernobyl
+## 6                          6. The Wire
+## 7        7. Avatar: The Last Airbender
+## 8                    8. Blue Planet II
+## 9                      9. The Sopranos
+## 10     10. Cosmos: A Spacetime Odyssey
+## 11                          11. Cosmos
+## 12                      12. Our Planet
+## 13                 13. Game of Thrones
+## 14                           14. Bluey
+## 15                15. The World at War
+## 16 16. Fullmetal Alchemist Brotherhood
+## 17                  17. Rick and Morty
+## 18                            18. Life
+## 19                  19. The Last Dance
+## 20               20. The Twilight Zone
+## 21                 21. The Vietnam War
+## 22                        22. Sherlock
+## 23                 23. Attack on Titan
+## 24     24. Batman: The Animated Series
+## 25                          25. Arcane
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# ranks}
+\FunctionTok{colnames}\NormalTok{(title\_list\_sub) }\OtherTok{\textless{}{-}} \StringTok{"ranks"}
+
+\CommentTok{\# split the string(rank and title)}
+\NormalTok{split\_df }\OtherTok{\textless{}{-}} \FunctionTok{strsplit}\NormalTok{(}\FunctionTok{as.character}\NormalTok{(title\_list\_sub}\SpecialCharTok{$}\NormalTok{ranks),}\StringTok{"."}\NormalTok{,}\AttributeTok{fixed =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{split\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{do.call}\NormalTok{(rbind,split\_df))}
+
+\CommentTok{\# rename and delete columns}
+\CommentTok{\# deleting columns 3 and 4 since it duplicated the columns}
+\NormalTok{split\_df }\OtherTok{\textless{}{-}}\NormalTok{ split\_df[}\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(}\DecValTok{3}\SpecialCharTok{:}\DecValTok{4}\NormalTok{)] }
+
+\CommentTok{\# renaming column 1 and 2}
+\FunctionTok{colnames}\NormalTok{(split\_df) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Ranks"}\NormalTok{,}\StringTok{"Title"}\NormalTok{) }
+
+\CommentTok{\# structure of splif\_df}
+\FunctionTok{str}\NormalTok{(split\_df) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 'data.frame':    25 obs. of  2 variables:
+##  $ Ranks: chr  "1" "2" "3" "4" ...
+##  $ Title: chr  " Breaking Bad" " Planet Earth II" " Planet Earth" " Band of Brothers" ...
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{head}\NormalTok{(split\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Ranks             Title
+## 1     1      Breaking Bad
+## 2     2   Planet Earth II
+## 3     3      Planet Earth
+## 4     4  Band of Brothers
+## 5     5         Chernobyl
+## 6     6          The Wire
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{split\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Ranks                            Title
+## 1      1                     Breaking Bad
+## 2      2                  Planet Earth II
+## 3      3                     Planet Earth
+## 4      4                 Band of Brothers
+## 5      5                        Chernobyl
+## 6      6                         The Wire
+## 7      7       Avatar: The Last Airbender
+## 8      8                   Blue Planet II
+## 9      9                     The Sopranos
+## 10    10      Cosmos: A Spacetime Odyssey
+## 11    11                           Cosmos
+## 12    12                       Our Planet
+## 13    13                  Game of Thrones
+## 14    14                            Bluey
+## 15    15                 The World at War
+## 16    16  Fullmetal Alchemist Brotherhood
+## 17    17                   Rick and Morty
+## 18    18                             Life
+## 19    19                   The Last Dance
+## 20    20                The Twilight Zone
+## 21    21                  The Vietnam War
+## 22    22                         Sherlock
+## 23    23                  Attack on Titan
+## 24    24      Batman: The Animated Series
+## 25    25                           Arcane
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rank\_title }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{rank\_title =}\NormalTok{ split\_df)}
+
+\FunctionTok{write.csv}\NormalTok{(rank\_title,}\AttributeTok{file =} \StringTok{"D:/RAnalytics/Worksheet\#5/title.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Extracting link}
+\CommentTok{\# extracting for link of every movie}
+\NormalTok{link\_list }\OtherTok{\textless{}{-}} \FunctionTok{scrape}\NormalTok{(session) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{html\_nodes}\NormalTok{(}\StringTok{\textquotesingle{}a.ipc{-}title{-}link{-}wrapper\textquotesingle{}}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{html\_attr}\NormalTok{(}\StringTok{\textquotesingle{}href\textquotesingle{}}\NormalTok{) }
+
+\CommentTok{\# Ensure no NA values}
+\NormalTok{link\_list }\OtherTok{\textless{}{-}}\NormalTok{ link\_list[}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(link\_list) }\SpecialCharTok{\&}\NormalTok{ link\_list }\SpecialCharTok{!=} \StringTok{""}\NormalTok{]}
+
+\CommentTok{\# Construct full URLs}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\FunctionTok{length}\NormalTok{(link\_list)) \{}
+\NormalTok{  link\_list[i] }\OtherTok{\textless{}{-}} \FunctionTok{paste0}\NormalTok{(}\StringTok{"https://imdb.com"}\NormalTok{, link\_list[i])}
+\NormalTok{\}}
+
+\CommentTok{\# Convert to a dataframe}
+\NormalTok{links }\OtherTok{\textless{}{-}} \FunctionTok{as.data.frame}\NormalTok{(link\_list)}
+\FunctionTok{names}\NormalTok{(links) }\OtherTok{\textless{}{-}} \StringTok{"link"}
+
+\NormalTok{rank\_title }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+  \AttributeTok{rank\_title =}\NormalTok{ split\_df)}
+
+\CommentTok{\# combining the dataframe}
+\NormalTok{scrape\_df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(rank\_title)}
+\FunctionTok{names}\NormalTok{(scrape\_df) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Rank"}\NormalTok{, }\StringTok{"Title"}\NormalTok{)}
+
+\FunctionTok{head}\NormalTok{(scrape\_df)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Rank             Title
+## 1    1      Breaking Bad
+## 2    2   Planet Earth II
+## 3    3      Planet Earth
+## 4    4  Band of Brothers
+## 5    5         Chernobyl
+## 6    6          The Wire
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{scrape\_df}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    Rank                            Title
+## 1     1                     Breaking Bad
+## 2     2                  Planet Earth II
+## 3     3                     Planet Earth
+## 4     4                 Band of Brothers
+## 5     5                        Chernobyl
+## 6     6                         The Wire
+## 7     7       Avatar: The Last Airbender
+## 8     8                   Blue Planet II
+## 9     9                     The Sopranos
+## 10   10      Cosmos: A Spacetime Odyssey
+## 11   11                           Cosmos
+## 12   12                       Our Planet
+## 13   13                  Game of Thrones
+## 14   14                            Bluey
+## 15   15                 The World at War
+## 16   16  Fullmetal Alchemist Brotherhood
+## 17   17                   Rick and Morty
+## 18   18                             Life
+## 19   19                   The Last Dance
+## 20   20                The Twilight Zone
+## 21   21                  The Vietnam War
+## 22   22                         Sherlock
+## 23   23                  Attack on Titan
+## 24   24      Batman: The Animated Series
+## 25   25                           Arcane
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(scrape\_df,}\AttributeTok{file =} \StringTok{"D:/RAnalytics/Worksheet\#5/top250.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{imdb\_top\_25 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{()}
+
+\CommentTok{\# for this example, we will get only the content for the 1st twenty{-}five rows}
+\ControlFlowTok{for}\NormalTok{ (row }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{25}\NormalTok{) \{}
+  \CommentTok{\# Get the URL from the "href" column}
+\NormalTok{  url }\OtherTok{\textless{}{-}}\NormalTok{ links}\SpecialCharTok{$}\NormalTok{link[row]}
+  
+  \CommentTok{\# Skip if the URL is empty or improperly constructed}
+  \ControlFlowTok{if}\NormalTok{ (url }\SpecialCharTok{==} \StringTok{""} \SpecialCharTok{||} \FunctionTok{is.na}\NormalTok{(url)) \{}
+    \ControlFlowTok{next}
+\NormalTok{  \}}
+  
+  \CommentTok{\# Read the HTML content of the webpage }
+\NormalTok{  session2 }\OtherTok{\textless{}{-}} \FunctionTok{bow}\NormalTok{(url, }\AttributeTok{user\_agent =} \StringTok{"Educational"}\NormalTok{)}
+\NormalTok{  webpage }\OtherTok{\textless{}{-}} \FunctionTok{scrape}\NormalTok{(session2)}
+  
+  \CommentTok{\# Extract the rating using the appropriate CSS selector}
+\NormalTok{  rating }\OtherTok{\textless{}{-}} \FunctionTok{html\_text}\NormalTok{(}\FunctionTok{html\_nodes}\NormalTok{(webpage, }\StringTok{".sc{-}d541859f{-}1.imUuxf"}\NormalTok{))}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(rating) }\SpecialCharTok{==} \DecValTok{0}\NormalTok{) \{}
+    \ControlFlowTok{next}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    rating }\OtherTok{\textless{}{-}}\NormalTok{ rating[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  \}}
+  
+  \CommentTok{\# Extracting votecount}
+\NormalTok{  votecount }\OtherTok{\textless{}{-}} \FunctionTok{html\_text}\NormalTok{(}\FunctionTok{html\_nodes}\NormalTok{(webpage, }\StringTok{\textquotesingle{}div.sc{-}d541859f{-}3.dwhNqC\textquotesingle{}}\NormalTok{))}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(votecount) }\SpecialCharTok{==} \DecValTok{0}\NormalTok{) \{}
+    \ControlFlowTok{next}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    votecount }\OtherTok{\textless{}{-}}\NormalTok{ votecount[}\DecValTok{1}\NormalTok{]}
+\NormalTok{  \}}
+  
+  \CommentTok{\# Extracting number of episodes and year released}
+\NormalTok{  numofEps\_year }\OtherTok{\textless{}{-}} \FunctionTok{html\_text}\NormalTok{(}\FunctionTok{html\_nodes}\NormalTok{(webpage, }\AttributeTok{xpath =} \StringTok{"//span[contains(text(), \textquotesingle{}episodes\textquotesingle{})]"}\NormalTok{))}
+  \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(numofEps\_year) }\SpecialCharTok{==} \DecValTok{0}\NormalTok{) \{}
+    \ControlFlowTok{next}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{    numofEps\_year }\OtherTok{\textless{}{-}}\NormalTok{ numofEps\_year[}\DecValTok{1}\NormalTok{]}
+\NormalTok{    numofEps }\OtherTok{\textless{}{-}} \FunctionTok{sub}\NormalTok{(}\StringTok{"episodes.*"}\NormalTok{, }\StringTok{"episodes"}\NormalTok{, numofEps\_year)}
+\NormalTok{    year\_released }\OtherTok{\textless{}{-}} \FunctionTok{sub}\NormalTok{(}\StringTok{".*episodes • "}\NormalTok{, }\StringTok{""}\NormalTok{, numofEps\_year)}
+\NormalTok{  \}}
+  
+  \CommentTok{\# Print or save the extracted data}
+  \FunctionTok{cat}\NormalTok{(}\StringTok{"Rating for"}\NormalTok{, url, }\StringTok{"is:"}\NormalTok{, rating, }\StringTok{"vote count is"}\NormalTok{, votecount, }\StringTok{"number of episodes is"}\NormalTok{, numofEps, }\StringTok{"year released is"}\NormalTok{, year\_released, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+  
+  \CommentTok{\# Store the results}
+\NormalTok{  imdb\_top\_25 }\OtherTok{\textless{}{-}} \FunctionTok{rbind}\NormalTok{(imdb\_top\_25, }\FunctionTok{data.frame}\NormalTok{(}\AttributeTok{Rating =}\NormalTok{ rating, }\AttributeTok{VoteCount =}\NormalTok{ votecount, }\AttributeTok{Number.of.Episodes =}\NormalTok{ numofEps, }\AttributeTok{Year.Released =}\NormalTok{ year\_released))}
+  
+  \CommentTok{\# Add some delay to avoid overloading the server (optional)}
+  \FunctionTok{Sys.sleep}\NormalTok{(}\DecValTok{3}\NormalTok{)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Rating for https://imdb.com/title/tt0903747/?ref_=chttvtp_t_1 is: 9.5 vote count is 2.2M number of episodes is 62 episodes year released is 2008–2013 
+## Rating for https://imdb.com/title/tt5491994/?ref_=chttvtp_t_2 is: 9.5 vote count is 162K number of episodes is 6 episodes year released is 2016 
+## Rating for https://imdb.com/title/tt0795176/?ref_=chttvtp_t_3 is: 9.4 vote count is 224K number of episodes is 11 episodes year released is 2006 
+## Rating for https://imdb.com/title/tt0185906/?ref_=chttvtp_t_4 is: 9.4 vote count is 546K number of episodes is 10 episodes year released is 2001 
+## Rating for https://imdb.com/title/tt7366338/?ref_=chttvtp_t_5 is: 9.3 vote count is 907K number of episodes is 5 episodes year released is 2019 
+## Rating for https://imdb.com/title/tt0306414/?ref_=chttvtp_t_6 is: 9.3 vote count is 391K number of episodes is 60 episodes year released is 2002–2008 
+## Rating for https://imdb.com/title/tt0417299/?ref_=chttvtp_t_7 is: 9.3 vote count is 390K number of episodes is 61 episodes year released is 2005–2008 
+## Rating for https://imdb.com/title/tt6769208/?ref_=chttvtp_t_8 is: 9.3 vote count is 49K number of episodes is 7 episodes year released is 2017 
+## Rating for https://imdb.com/title/tt0141842/?ref_=chttvtp_t_9 is: 9.2 vote count is 498K number of episodes is 86 episodes year released is 1999–2007 
+## Rating for https://imdb.com/title/tt2395695/?ref_=chttvtp_t_10 is: 9.2 vote count is 132K number of episodes is 13 episodes year released is 2014 
+## Rating for https://imdb.com/title/tt0081846/?ref_=chttvtp_t_11 is: 9.3 vote count is 46K number of episodes is 13 episodes year released is 1980 
+## Rating for https://imdb.com/title/tt9253866/?ref_=chttvtp_t_12 is: 9.2 vote count is 54K number of episodes is 12 episodes year released is 2019–2023 
+## Rating for https://imdb.com/title/tt0944947/?ref_=chttvtp_t_13 is: 9.2 vote count is 2.4M number of episodes is 62 episodes year released is 2011–2019 
+## Rating for https://imdb.com/title/tt7678620/?ref_=chttvtp_t_14 is: 9.3 vote count is 34K number of episodes is 137 episodes year released is 2018–2024 
+## Rating for https://imdb.com/title/tt0071075/?ref_=chttvtp_t_15 is: 9.2 vote count is 31K number of episodes is 26 episodes year released is 1973–1974 
+## Rating for https://imdb.com/title/tt1355642/?ref_=chttvtp_t_16 is: 9.1 vote count is 209K number of episodes is 64 episodes year released is 2009–2010 
+## Rating for https://imdb.com/title/tt2861424/?ref_=chttvtp_t_17 is: 9.1 vote count is 627K number of episodes is 72 episodes year released is 2013–2025 
+## Rating for https://imdb.com/title/tt1533395/?ref_=chttvtp_t_18 is: 9.1 vote count is 44K number of episodes is 11 episodes year released is 2009 
+## Rating for https://imdb.com/title/tt8420184/?ref_=chttvtp_t_19 is: 9.0 vote count is 160K number of episodes is 10 episodes year released is 2020 
+## Rating for https://imdb.com/title/tt0052520/?ref_=chttvtp_t_20 is: 9.0 vote count is 97K number of episodes is 155 episodes year released is 1959–1964 
+## Rating for https://imdb.com/title/tt1877514/?ref_=chttvtp_t_21 is: 9.1 vote count is 30K number of episodes is 10 episodes year released is 2017 
+## Rating for https://imdb.com/title/tt1475582/?ref_=chttvtp_t_22 is: 9.1 vote count is 1M number of episodes is 15 episodes year released is 2010–2017 
+## Rating for https://imdb.com/title/tt2560140/?ref_=chttvtp_t_23 is: 9.1 vote count is 561K number of episodes is 93 episodes year released is 2013–2023 
+## Rating for https://imdb.com/title/tt0103359/?ref_=chttvtp_t_24 is: 9.0 vote count is 122K number of episodes is 85 episodes year released is 1992–1995 
+## Rating for https://imdb.com/title/tt11126994/?ref_=chttvtp_t_25 is: 9.0 vote count is 304K number of episodes is 14 episodes year released is 2021–2024
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{names}\NormalTok{(imdb\_top\_25) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Rating"}\NormalTok{,}\StringTok{"VoteCount"}\NormalTok{,}\StringTok{"Number of Episodes"}\NormalTok{, }\StringTok{"Year Released"}\NormalTok{)}
+
+\FunctionTok{write.csv}\NormalTok{(imdb\_top\_25, }\AttributeTok{file =} \StringTok{"D:/RAnalytics/Worksheet\#5/imdb\_top\_25.csv"}\NormalTok{)}
+
+\CommentTok{\# Combine with the previous dataframe}
+\NormalTok{imdb\_top\_25 }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}
+\NormalTok{  scrape\_df, imdb\_top\_25)}
+
+\FunctionTok{write.csv}\NormalTok{(imdb\_top\_25, }\AttributeTok{file =} \StringTok{"D:/RAnalytics/Worksheet\#5/imdb\_top\_250.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Displaying with kableExtra}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'kableExtra' was built under R version 4.4.2
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'kableExtra'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:dplyr':
+## 
+##     group_rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(imdb\_top\_25,}\AttributeTok{caption =} \StringTok{"Extracting Rating, VoteCount, Number of Episodes, Year Released"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ T, }\AttributeTok{html\_font =} \StringTok{"Cambria"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{font\_size =} \DecValTok{8}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{landscape}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{landscape}\begingroup\fontsize{8}{10}\selectfont
+
+\begin{longtabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X}
+\caption{\label{tab:unnamed-chunk-5}Extracting Rating, VoteCount, Number of Episodes, Year Released}\\
+\toprule
+Rank & Title & Rating & VoteCount & Number.of.Episodes & Year.Released\\
+\midrule
+1 & Breaking Bad & 9.5 & 2.2M & 62 episodes & 2008–2013\\
+2 & Planet Earth II & 9.5 & 162K & 6 episodes & 2016\\
+3 & Planet Earth & 9.4 & 224K & 11 episodes & 2006\\
+4 & Band of Brothers & 9.4 & 546K & 10 episodes & 2001\\
+5 & Chernobyl & 9.3 & 907K & 5 episodes & 2019\\
+\addlinespace
+6 & The Wire & 9.3 & 391K & 60 episodes & 2002–2008\\
+7 & Avatar: The Last Airbender & 9.3 & 390K & 61 episodes & 2005–2008\\
+8 & Blue Planet II & 9.3 & 49K & 7 episodes & 2017\\
+9 & The Sopranos & 9.2 & 498K & 86 episodes & 1999–2007\\
+10 & Cosmos: A Spacetime Odyssey & 9.2 & 132K & 13 episodes & 2014\\
+\addlinespace
+11 & Cosmos & 9.3 & 46K & 13 episodes & 1980\\
+12 & Our Planet & 9.2 & 54K & 12 episodes & 2019–2023\\
+13 & Game of Thrones & 9.2 & 2.4M & 62 episodes & 2011–2019\\
+14 & Bluey & 9.3 & 34K & 137 episodes & 2018–2024\\
+15 & The World at War & 9.2 & 31K & 26 episodes & 1973–1974\\
+\addlinespace
+16 & Fullmetal Alchemist Brotherhood & 9.1 & 209K & 64 episodes & 2009–2010\\
+17 & Rick and Morty & 9.1 & 627K & 72 episodes & 2013–2025\\
+18 & Life & 9.1 & 44K & 11 episodes & 2009\\
+19 & The Last Dance & 9.0 & 160K & 10 episodes & 2020\\
+20 & The Twilight Zone & 9.0 & 97K & 155 episodes & 1959–1964\\
+\addlinespace
+21 & The Vietnam War & 9.1 & 30K & 10 episodes & 2017\\
+22 & Sherlock & 9.1 & 1M & 15 episodes & 2010–2017\\
+23 & Attack on Titan & 9.1 & 561K & 93 episodes & 2013–2023\\
+24 & Batman: The Animated Series & 9.0 & 122K & 85 episodes & 1992–1995\\
+25 & Arcane & 9.0 & 304K & 14 episodes & 2021–2024\\
+\bottomrule
+\end{longtabu}
+\endgroup{}
+\end{landscape}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display top 25 shows only}
+\FunctionTok{library}\NormalTok{(kableExtra)}
+
+\NormalTok{df\_d }\OtherTok{\textless{}{-}}\NormalTok{ imdb\_top\_25[}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{25}\NormalTok{),]}
+
+\NormalTok{df\_d }\OtherTok{\textless{}{-}}\NormalTok{ df\_d }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{select\_if}\NormalTok{(}\SpecialCharTok{\textasciitilde{}} \SpecialCharTok{!}\FunctionTok{all}\NormalTok{(}\FunctionTok{is.na}\NormalTok{(.)))}
+
+\NormalTok{knitr}\SpecialCharTok{::}\FunctionTok{kable}\NormalTok{(df\_d, }\AttributeTok{caption =} \StringTok{"IMDB Top 25 Shows"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_classic}\NormalTok{(}\AttributeTok{full\_width =}\NormalTok{ T, }\AttributeTok{html\_font =} \StringTok{"Arial Narrow"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{kable\_styling}\NormalTok{(}\AttributeTok{font\_size =} \DecValTok{8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begingroup\fontsize{8}{10}\selectfont
+
+\begin{longtabu} to \linewidth {>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X>{\raggedright}X}
+\caption{\label{tab:unnamed-chunk-5}IMDB Top 25 Shows}\\
+\toprule
+Rank & Title & Rating & VoteCount & Number.of.Episodes & Year.Released\\
+\midrule
+1 & Breaking Bad & 9.5 & 2.2M & 62 episodes & 2008–2013\\
+2 & Planet Earth II & 9.5 & 162K & 6 episodes & 2016\\
+3 & Planet Earth & 9.4 & 224K & 11 episodes & 2006\\
+4 & Band of Brothers & 9.4 & 546K & 10 episodes & 2001\\
+5 & Chernobyl & 9.3 & 907K & 5 episodes & 2019\\
+\addlinespace
+6 & The Wire & 9.3 & 391K & 60 episodes & 2002–2008\\
+7 & Avatar: The Last Airbender & 9.3 & 390K & 61 episodes & 2005–2008\\
+8 & Blue Planet II & 9.3 & 49K & 7 episodes & 2017\\
+9 & The Sopranos & 9.2 & 498K & 86 episodes & 1999–2007\\
+10 & Cosmos: A Spacetime Odyssey & 9.2 & 132K & 13 episodes & 2014\\
+\addlinespace
+11 & Cosmos & 9.3 & 46K & 13 episodes & 1980\\
+12 & Our Planet & 9.2 & 54K & 12 episodes & 2019–2023\\
+13 & Game of Thrones & 9.2 & 2.4M & 62 episodes & 2011–2019\\
+14 & Bluey & 9.3 & 34K & 137 episodes & 2018–2024\\
+15 & The World at War & 9.2 & 31K & 26 episodes & 1973–1974\\
+\addlinespace
+16 & Fullmetal Alchemist Brotherhood & 9.1 & 209K & 64 episodes & 2009–2010\\
+17 & Rick and Morty & 9.1 & 627K & 72 episodes & 2013–2025\\
+18 & Life & 9.1 & 44K & 11 episodes & 2009\\
+19 & The Last Dance & 9.0 & 160K & 10 episodes & 2020\\
+20 & The Twilight Zone & 9.0 & 97K & 155 episodes & 1959–1964\\
+\addlinespace
+21 & The Vietnam War & 9.1 & 30K & 10 episodes & 2017\\
+22 & Sherlock & 9.1 & 1M & 15 episodes & 2010–2017\\
+23 & Attack on Titan & 9.1 & 561K & 93 episodes & 2013–2023\\
+24 & Batman: The Animated Series & 9.0 & 122K & 85 episodes & 1992–1995\\
+25 & Arcane & 9.0 & 304K & 14 episodes & 2021–2024\\
+\bottomrule
+\end{longtabu}
+\endgroup{}
+
+\end{document}
