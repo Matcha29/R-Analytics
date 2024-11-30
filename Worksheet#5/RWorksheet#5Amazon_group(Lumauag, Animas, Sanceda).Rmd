@@ -1,371 +1,224 @@
 ---
-output:
-  pdf_document: default
-  html_document: default
+title: "RWorksheet#5Amazon_group(Lumauag, Animas, Sanceda)"
+author: "Matt Andrei Lumauag"
+date: "2024-11-30"
+output: pdf_document
 ---
+
 ```{r}
-options(repos = c(CRAN = "https://cloud.r-project.org/"))
-#Watches
-# Install and load the rvest package
-#if (!requireNamespace("rvest", quietly = TRUE)) {
-  install.packages("rvest")
-#}
-library(rvest)
-library(polite)
+# Load the necessary libraries for web scraping, data manipulation, and visualization
+library(rvest)       # For scraping web data
+library(dplyr)       # For manipulating and cleaning data
+library(stringr)     # For string manipulation
+library(polite)      # For polite web scraping (handling user-agent headers)
+library(ggplot2)     # For creating visualizations
 
-# Read the HTML file
-url <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225019011&rh=n%3A7141123011%2Cn%3A16225019011%2Cn%3A6358539011&ref=nav_em__nav_desktop_sa_intl_watches_0_2_13_4"
+# Set up polite scraping session to avoid aggressive scraping
+polite::use_manners(save_as = 'polite_scrape.R')
 
-session <- bow(url, user_agent = "Student's Demo Educational")
-session
+base_url <- 'https://www.amazon.com'  # Base URL for scraping Amazon
 
-session_page <- scrape(session)
+# Initiating a session with polite web scraping manners
+scrape_session <- bow(base_url, user_agent = "Educational")
+scrape_session
 
-# Find all div elements with the specified class
-div_elements <- html_nodes(session_page, 'div.sg-col-4-of-24.sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
-
-# Create empty vectors to store data
-links <- character()
-img_srcs <- character()
-titles <- character()
-prices <- character()
-ratings <- character()
-
-max_products <- 29
-
-# Limit the loop to only collect data for the first 30 products
-for (i in 1:min(length(div_elements), max_products)) {
-  div_element <- div_elements[i]
- 
-  # Find the a element with class="a-link-normal s-no-outline" and get the link
-  a_element <- html_node(div_element, 'a.a-link-normal.s-no-outline')
-  link <- ifelse(!is.na(a_element), paste0("https://amazon.com", html_attr(a_element, "href")), '')
- 
-  # Find the img element with class="s-image" and get the link
-  img_element <- html_node(div_element, 'img.s-image')
-  img_src <- ifelse(!is.na(img_element), html_attr(img_element, "src"), '')
- 
-  # Find the span element with class="a-size-base-plus a-color-base a-text-normal" and get the title
-  title_element <- html_node(div_element, 'span.a-size-base-plus.a-color-base.a-text-normal')
-  title <- ifelse(!is.na(title_element), html_text(title_element), '')
- 
-  # Find the span element with class="a-price-whole" and get the price
-  price_element <- html_node(div_element, 'span.a-price-whole')
-  price <- ifelse(!is.na(price_element), html_text(price_element), '')
- 
-  # Find the span element with class="a-icon-alt" and get the ratings
-  rating_element <- html_node(div_element, 'span.a-icon-alt')
-  rating <- ifelse(!is.na(rating_element), html_text(rating_element), '')
- 
-  # Append data to vectors
-  links <- c(links, link)
-  img_srcs <- c(img_srcs, img_src)
-  titles <- c(titles, title)
-  prices <- c(prices, price)
-  ratings <- c(ratings, rating)
-}
-
-# Create a data frame with the scraped data
-product_df <- data.frame(
-  Links = links,
-  Images = img_srcs,
-  Title = titles,
-  Price = prices,
-  Rating = ratings
-)
-
-# Write the data to a CSV file
-write.csv(product_df, "WatchMeWhip.csv", row.names = FALSE)
-```
-```{r}
-#catSupplies
-# Install and load the rvest package
-#if (!requireNamespace("rvest", quietly = TRUE)) {
-  install.packages("rvest")
-#}
-library(rvest)
-library(polite)
-# Read the HTML file
-url <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225013011&rh=n%3A%2116225013011%2Cn%3A2975241011&ref=nav_em__nav_desktop_sa_intl_cats_0_2_21_3"
-
-session <- bow(url, user_agent = "Student's Demo Educational")
-session
-
-session_page <- scrape(session)
-
-# Find all div elements with the specified class
-div_elements <- html_nodes(session_page, 'div.sg-col-4-of-24.sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
-
-# Create empty vectors to store data
-links <- character()
-img_srcs <- character()
-titles <- character()
-prices <- character()
-ratings <- character()
-
-max_products <- 29
-
-# Limit the loop to only collect data for the first 30 products
-for (i in 1:min(length(div_elements), max_products)) {
-  div_element <- div_elements[i]
- 
-  # Find the a element with class="a-link-normal s-no-outline" and get the link
-  a_element <- html_node(div_element, 'a.a-link-normal.s-no-outline')
-  link <- ifelse(!is.na(a_element), paste0("https://amazon.com", html_attr(a_element, "href")), '')
- 
-  # Find the img element with class="s-image" and get the link
-  img_element <- html_node(div_element, 'img.s-image')
-  img_src <- ifelse(!is.na(img_element), html_attr(img_element, "src"), '')
- 
-  # Find the span element with class="a-size-base-plus a-color-base a-text-normal" and get the title
-  title_element <- html_node(div_element, 'span.a-size-base-plus.a-color-base.a-text-normal')
-  title <- ifelse(!is.na(title_element), html_text(title_element), '')
- 
-  # Find the span element with class="a-price-whole" and get the price
-  price_element <- html_node(div_element, 'span.a-price-whole')
-  price <- ifelse(!is.na(price_element), html_text(price_element), '')
- 
-  # Find the span element with class="a-icon-alt" and get the ratings
-  rating_element <- html_node(div_element, 'span.a-icon-alt')
-  rating <- ifelse(!is.na(rating_element), html_text(rating_element), '')
- 
-  # Append data to vectors
-  links <- c(links, link)
-  img_srcs <- c(img_srcs, img_src)
-  titles <- c(titles, title)
-  prices <- c(prices, price)
-  ratings <- c(ratings, rating)
-}
-
-# Create a data frame with the scraped data
-product_df <- data.frame(
-  Links = links,
-  Images = img_srcs,
-  Title = titles,
-  Price = prices,
-  Rating = ratings
-)
-
-# Write the data to a CSV file
-write.csv(product_df, "CatSupplies.csv", row.names = FALSE)
-```
-```{r}
-#Furniture
-# Install and load the rvest package
-#if (!requireNamespace("rvest", quietly = TRUE)) {
-  install.packages("rvest")
-#}
-library(rvest)
-library(polite)
-# Read the HTML file
-url <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225011011&rh=n%3A%2116225011011%2Cn%3A1063306&ref=nav_em__nav_desktop_sa_intl_furniture_0_2_17_6"
-
-session <- bow(url, user_agent = "Student's Demo Educational")
-session
-
-session_page <- scrape(session)
-
-# Find all div elements with the specified class
-div_elements <- html_nodes(session_page, 'div.sg-col-4-of-24.sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
-
-# Create empty vectors to store data
-links <- character()
-img_srcs <- character()
-titles <- character()
-prices <- character()
-ratings <- character()
-
-max_products <- 29
-
-# Limit the loop to only collect data for the first 30 products
-for (i in 1:min(length(div_elements), max_products)) {
-  div_element <- div_elements[i]
- 
-  # Find the a element with class="a-link-normal s-no-outline" and get the link
-  a_element <- html_node(div_element, 'a.a-link-normal.s-no-outline')
-  link <- ifelse(!is.na(a_element), paste0("https://amazon.com", html_attr(a_element, "href")), '')
- 
-  # Find the img element with class="s-image" and get the link
-  img_element <- html_node(div_element, 'img.s-image')
-  img_src <- ifelse(!is.na(img_element), html_attr(img_element, "src"), '')
- 
-  # Find the span element with class="a-size-base-plus a-color-base a-text-normal" and get the title
-  title_element <- html_node(div_element, 'span.a-size-base-plus.a-color-base.a-text-normal')
-  title <- ifelse(!is.na(title_element), html_text(title_element), '')
- 
-  # Find the span element with class="a-price-whole" and get the price
-  price_element <- html_node(div_element, 'span.a-price-whole')
-  price <- ifelse(!is.na(price_element), html_text(price_element), '')
- 
-  # Find the span element with class="a-icon-alt" and get the ratings
-  rating_element <- html_node(div_element, 'span.a-icon-alt')
-  rating <- ifelse(!is.na(rating_element), html_text(rating_element), '')
- 
-  # Append data to vectors
-  links <- c(links, link)
-  img_srcs <- c(img_srcs, img_src)
-  titles <- c(titles, title)
-  prices <- c(prices, price)
-  ratings <- c(ratings, rating)
-}
-
-# Create a data frame with the scraped data
-product_df <- data.frame(
-  Links = links,
-  Images = img_srcs,
-  Title = titles,
-  Price = prices,
-  Rating = ratings
-)
-
-# Write the data to a CSV file
-write.csv(product_df, "Furniture.csv", row.names = FALSE)
 ```
 
 ```{r}
-#CellphoneAccessories
-# Install and load the rvest package
-#if (!requireNamespace("rvest", quietly = TRUE)) {
-  install.packages("rvest")
-#}
-library(rvest)
-library(polite)
-# Read the HTML file
-url <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225009011&rh=n%3A%2116225009011%2Cn%3A2811119011&ref=nav_em__nav_desktop_sa_intl_cell_phones_and_accessories_0_2_5_5"
+# Define the function to scrape product details from a given category on Amazon
+scrape_products <- function(base_url, product_category, max_items = 30) {
+  product_data <- data.frame()  # Create an empty data frame to store all the product information
+  current_page <- 1            # Start scraping from the first page
 
-session <- bow(url, user_agent = "Student's Demo Educational")
-session
+  # Keep scraping until the required number of products is reached
+  while (nrow(product_data) < max_items) {
+    category_url <- paste0(base_url, "&page=", current_page)  # Construct the URL for the current page
+    message("Scraping: ", category_url)  # Print the current URL being scraped
+    
+    # Read the HTML content of the page
+    page_html <- read_html(category_url)
 
-session_page <- scrape(session)
+    # Extract product titles from the page
+    titles <- page_html %>%
+      html_nodes("span.a-text-normal") %>%
+      html_text(trim = TRUE)
+    
+    # Remove any unwanted or irrelevant entries in the titles
+    titles <- titles[titles != "Check each product page for other buying options."]
+    
+    # Extract product prices
+    prices <- page_html %>%
+      html_nodes('.a-price .a-offscreen') %>%
+      html_text(trim = TRUE)
+    
+    # Extract the product ratings and convert them to numeric values
+    ratings <- page_html %>%
+      html_nodes('span.a-icon-alt') %>%
+      html_text(trim = TRUE) %>%
+      str_extract("\\d\\.\\d") %>%
+      as.numeric()
 
-# Find all div elements with the specified class
-div_elements <- html_nodes(session_page, 'div.sg-col-4-of-24.sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
+    # Extract the number of reviews each product has
+    review_counts <- page_html %>%
+      html_nodes('.s-link-style .s-underline-text') %>%
+      html_text(trim = TRUE)
+    
+    # Extract product descriptions
+    descriptions <- page_html %>%
+      html_nodes("span.a-text-normal") %>%
+      html_text(trim = TRUE)
+    
+    # Remove unwanted entries from the descriptions
+    descriptions <- descriptions[descriptions != "Check each product page for other buying options."]
+    
+    # Ensure that all vectors have the same length before proceeding
+    min_length <- min(length(titles), length(prices), length(ratings), length(descriptions), length(review_counts))
+    if (min_length == 0) break  # If any of the vectors is empty, stop scraping
 
-# Create empty vectors to store data
-links <- character()
-img_srcs <- character()
-titles <- character()
-prices <- character()
-ratings <- character()
+    # Create a data frame for the current page's product data
+    page_data <- data.frame(
+      Title = head(titles, min_length),              # Product titles
+      Price = head(prices, min_length),              # Product prices
+      Category = rep(product_category, min_length),  # Product category
+      Rating = head(ratings, min_length),            # Product ratings
+      ReviewCount = head(review_counts, min_length), # Number of reviews
+      Description = head(descriptions, min_length)   # Product descriptions
+    )
 
-max_products <- 29
-
-# Limit the loop to only collect data for the first 30 products
-for (i in 1:min(length(div_elements), max_products)) {
-  div_element <- div_elements[i]
- 
-  # Find the a element with class="a-link-normal s-no-outline" and get the link
-  a_element <- html_node(div_element, 'a.a-link-normal.s-no-outline')
-  link <- ifelse(!is.na(a_element), paste0("https://amazon.com", html_attr(a_element, "href")), '')
- 
-  # Find the img element with class="s-image" and get the link
-  img_element <- html_node(div_element, 'img.s-image')
-  img_src <- ifelse(!is.na(img_element), html_attr(img_element, "src"), '')
- 
-  # Find the span element with class="a-size-base-plus a-color-base a-text-normal" and get the title
-  title_element <- html_node(div_element, 'span.a-size-base-plus.a-color-base.a-text-normal')
-  title <- ifelse(!is.na(title_element), html_text(title_element), '')
- 
-  # Find the span element with class="a-price-whole" and get the price
-  price_element <- html_node(div_element, 'span.a-price-whole')
-  price <- ifelse(!is.na(price_element), html_text(price_element), '')
- 
-  # Find the span element with class="a-icon-alt" and get the ratings
-  rating_element <- html_node(div_element, 'span.a-icon-alt')
-  rating <- ifelse(!is.na(rating_element), html_text(rating_element), '')
- 
-  # Append data to vectors
-  links <- c(links, link)
-  img_srcs <- c(img_srcs, img_src)
-  titles <- c(titles, title)
-  prices <- c(prices, price)
-  ratings <- c(ratings, rating)
+    # Append the data from this page to the overall data
+    product_data <- bind_rows(product_data, page_data)
+    
+    # Move to the next page
+    current_page <- current_page + 1
+  }
+  
+  # Limit the total number of products to the specified maximum
+  product_data <- head(product_data, max_items)
+  
+  # Add an index to the product titles for clarity
+  product_data$Title <- paste0(seq_len(nrow(product_data)), ". ", product_data$Title)
+  
+  return(product_data)  # Return the scraped product data
 }
 
-# Create a data frame with the scraped data
-product_df <- data.frame(
-  Links = links,
-  Images = img_srcs,
-  Title = titles,
-  Price = prices,
-  Rating = ratings
-)
 
-# Write the data to a CSV file
-write.csv(product_df, "CellphonesAccessories.csv", row.names = FALSE)
+```
+
+```{r}
+# Define URLs for different product categories to scrape
+watch_category_url <- "https://www.amazon.com/s?k=watches"
+cat_supplies_url <- "https://www.amazon.com/s?k=cat+supplies"
+furniture_category_url <- "https://www.amazon.com/s?k=Furniture"
+phone_accessories_url <- "https://www.amazon.com/s?k=cell+phone+accessories"
+sports_category_url <- "https://www.amazon.com/s?k=sports"
+
+```
+
+```{r}
+# Scrape 30 products from each category
+watches_data <- scrape_products(watch_category_url, "Watches", 30)
+cat_supplies_data <- scrape_products(cat_supplies_url, "Cat Supplies", 30)
+furniture_data <- scrape_products(furniture_category_url, "Furniture", 30)
+phone_accessories_data <- scrape_products(phone_accessories_url, "Cellphone Accessories", 30)
+sports_data <- scrape_products(sports_category_url, "Sports", 30)
+
+```
+
+```{r}
+# Combine the scraped data from all categories into a single data frame
+combined_products <- bind_rows(watches_data, cat_supplies_data, furniture_data, phone_accessories_data, sports_data)
+
+# Preview the combined product data
+combined_products
+
+# Save the combined product data to a CSV file
+write.csv(combined_products, "AmazonScraping.csv", row.names = FALSE)
+
 ```
 ```{r}
-#Sports&Fitness
-# Install and load the rvest package
-#if (!requireNamespace("rvest", quietly = TRUE)) {
-  install.packages("rvest")
-#}
-library(rvest)
-library(polite)
-# Read the HTML file
-url <- "https://www.amazon.com/s?i=specialty-aps&bbn=16225014011&rh=n%3A%2116225014011%2Cn%3A10971181011&ref=nav_em__nav_desktop_sa_intl_sports_fitness_0_2_23_4"
+#6. We have collected data by scraping 30 products from each of the six categories, gathering information such as product names, prices, categories, ratings, reviews, and descriptions for each product.
 
-session <- bow(url, user_agent = "Student's Demo Educational")
-session
+#7. The data we've gathered is intended for conducting market analysis.
 
-session_page <- scrape(session)
-
-# Find all div elements with the specified class
-div_elements <- html_nodes(session_page, 'div.sg-col-4-of-24.sg-col-4-of-12.s-result-item.s-asin.sg-col-4-of-16.sg-col.s-widget-spacing-small.sg-col-4-of-20')
-
-# Create empty vectors to store data
-links <- character()
-img_srcs <- character()
-titles <- character()
-prices <- character()
-ratings <- character()
-
-max_products <- 29
-
-# Limit the loop to only collect data for the first 30 products
-for (i in 1:min(length(div_elements), max_products)) {
-  div_element <- div_elements[i]
- 
-  # Find the a element with class="a-link-normal s-no-outline" and get the link
-  a_element <- html_node(div_element, 'a.a-link-normal.s-no-outline')
-  link <- ifelse(!is.na(a_element), paste0("https://amazon.com", html_attr(a_element, "href")), '')
- 
-  # Find the img element with class="s-image" and get the link
-  img_element <- html_node(div_element, 'img.s-image')
-  img_src <- ifelse(!is.na(img_element), html_attr(img_element, "src"), '')
- 
-  # Find the span element with class="a-size-base-plus a-color-base a-text-normal" and get the title
-  title_element <- html_node(div_element, 'span.a-size-base-plus.a-color-base.a-text-normal')
-  title <- ifelse(!is.na(title_element), html_text(title_element), '')
- 
-  # Find the span element with class="a-price-whole" and get the price
-  price_element <- html_node(div_element, 'span.a-price-whole')
-  price <- ifelse(!is.na(price_element), html_text(price_element), '')
- 
-  # Find the span element with class="a-icon-alt" and get the ratings
-  rating_element <- html_node(div_element, 'span.a-icon-alt')
-  rating <- ifelse(!is.na(rating_element), html_text(rating_element), '')
- 
-  # Append data to vectors
-  links <- c(links, link)
-  img_srcs <- c(img_srcs, img_src)
-  titles <- c(titles, title)
-  prices <- c(prices, price)
-  ratings <- c(ratings, rating)
-}
-
-# Create a data frame with the scraped data
-product_df <- data.frame(
-  Links = links,
-  Images = img_srcs,
-  Title = titles,
-  Price = prices,
-  Rating = ratings
-)
-
-# Write the data to a CSV file
-write.csv(product_df, "SportsFitness.csv", row.names = FALSE)
+#8. The visualizations offer valuable insights into pricing trends, customer satisfaction, and product popularity within different categories. They help identify competitive pricing strategies and highlight top-selling products. Additionally, the graphs show relationships between product ratings and review counts, revealing which products are both highly rated and frequently purchased.
 ```
+
+```{r}
+# Load the CSV file containing the scraped product data
+all_product_data <- read.csv("AmazonScraping.csv")
+
+# Clean the price data by removing dollar signs and commas, then converting to numeric
+all_product_data$Price <- as.numeric(gsub("[$,]", "", all_product_data$Price))
+
+# Filter out rows with missing or incomplete data
+cleaned_product_data <- all_product_data %>%
+  filter(!is.na(Price), !is.na(Rating), !is.na(ReviewCount))
+
+# Graph 1: Distribution of product prices
+ggplot(cleaned_product_data, aes(x = Price)) +
+  geom_histogram(binwidth = 50, fill = "green", color = "cyan") +
+  labs(title = "Price Distribution of Products", x = "Price ($)", y = "Frequency") +
+  theme_minimal()
+
+# Graph 2: Average ratings by category
+average_ratings <- cleaned_product_data %>%
+  group_by(Category) %>%
+  summarize(AverageRating = mean(Rating, na.rm = TRUE))
+
+ggplot(average_ratings, aes(x = Category, y = AverageRating, fill = Category)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Average Ratings by Category", x = "Category", y = "Average Rating") +
+  theme_minimal()
+
+# Graph 3: Total number of reviews by category
+total_reviews_per_category <- cleaned_product_data %>%
+  group_by(Category) %>%
+  summarize(TotalReviews = sum(as.numeric(gsub("[^0-9]", "", ReviewCount)), na.rm = TRUE))
+
+ggplot(total_reviews_per_category, aes(x = Category, y = TotalReviews, fill = Category)) +
+  geom_bar(stat = "identity", color = "black") +
+  labs(title = "Total Reviews by Category", x = "Category", y = "Review Count") +
+  theme_minimal()
+
+# Graph 4: Relationship between ratings and review counts
+ggplot(cleaned_product_data, aes(x = Rating, y = as.numeric(gsub("[^0-9]", "", ReviewCount)))) +
+  geom_point(alpha = 0.6, color = "purple") +
+  labs(title = "Ratings vs Number of Reviews", x = "Ratings", y = "Review Count") +
+  theme_minimal()
+```
+
+```{r}
+# Graph 5: Visualizing price vs ratings across categories
+ggplot(cleaned_product_data, aes(x = Price, y = Rating, color = Category)) +
+  geom_point() +
+  facet_wrap(~ Category, scales = "free") +
+  labs(title = "Ratings vs Price by Category", x = "Price ($)", y = "Ratings") +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+```{r}
+# Rank products by Ratings
+ranked_by_rating <- cleaned_product_data %>%
+  arrange(desc(Rating))
+head(ranked_by_rating, 150)
+
+```
+
+```{r}
+# Rank products by Price
+cleaned_product_data$Price <- as.numeric(gsub("\\$", "", cleaned_product_data$Price))
+
+# Sort products by Price in ascending order
+ranked_by_price_asc <- cleaned_product_data %>%
+  arrange(Price)
+
+# Sort products by Price in descending order
+ranked_by_price_desc <- cleaned_product_data %>%
+  arrange(desc(Price))
+head(ranked_by_price_desc, 150)
+
+```
+
 
 
 
