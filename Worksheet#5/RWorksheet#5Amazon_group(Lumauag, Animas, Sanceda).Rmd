@@ -221,6 +221,3 @@ head(ranked_by_price_desc, 150)
 
 
 
-
-
-
