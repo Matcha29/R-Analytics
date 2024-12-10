@@ -1,0 +1,719 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r}
+# Define the list of product URLs and corresponding names
+product_urls <- c(
+ "https://www.amazon.com/Casio-AE-1500WH-5AVCF-10-Year-Battery/dp/B08VMTXZP1/ref=sr_1_1",
+  "https://www.amazon.com/Fossil-Quartz-Stainless-Steel-Chronograph/dp/B008AXYWHQ/ref=sr_1_2",
+  "https://www.amazon.com/Amazon-Essentials-Silver-Tone-Black-Strap/dp/B07YQFST6X/ref=sr_1_3",
+  "https://www.amazon.com/Timex-T49963-Expedition-Scout-Leather/dp/B00HF49WXK/ref=sr_1_4?",
+  "https://www.amazon.com/Invicta-Diver-Blue-Watch-26972/dp/B07GMSXZBM/ref=sr_1_5",
+  "https://www.amazon.com/Timex-T2H281-Reader-Black-Leather/dp/B000AYYIYU/ref=sr_1_6",
+  "https://www.amazon.com/SAMSUNG-Bluetooth-Smartwatch-Personalized-Advanced/dp/B0C797946T/ref=sr_1_7",
+  "https://www.amazon.com/Fossil-Quartz-Stainless-Leather-Chronograph/dp/B017SN1OI8/ref=sr_1_8",
+  "https://www.amazon.com/Nine-West-Womens-Strap-Watch/dp/B09HV5XZPP/ref=sr_1_9",
+  "https://www.amazon.com/Timex-Mens-Easy-Reader-Watch/dp/B000AYYIWW/ref=sr_1_10"
+)
+
+product_titles <- c(
+  "Casio Illuminator AE1500WH Series",
+  "Fossil Nate Men's Watch with Oversized Chronograph Watch",
+  "Amazon Essentials Men's Easy to Read Strap Watch",
+  "Timex Men's Expedition Scout 40mm Watch",
+  "Invicta Men's Pro Diver Quartz Watch",
+  "Timex Men's Easy Reader Watch",
+  "Samsung Galaxy Watch 6 44mm Bluetooth Smartwatch",
+  "Fossil Grant Men's Watch ",
+  "Nine West Women's Strap Watch",
+  "Timex Men's Easy Reader Watch"
+)
+```
+
+
+```{r}
+category_name <- "Watches"
+
+# Create an empty dataframe to store all reviews
+all_product_reviews <- data.frame()
+
+# Loop over each product URL
+for (idx in seq_along(product_urls)) {
+  url <- product_urls[idx]
+  product_title <- product_titles[idx]
+ 
+  # Initialize vectors to store individual review information for the current product
+  reviewer_names <- character()
+  review_dates <- character()
+  review_comments <- character()
+  verified_purchases <- character()
+  star_ratings <- numeric()
+ 
+  # Start scraping reviews, page by page
+  page_number <- 1
+  while(length(reviewer_names) < 2) {
+    # Modify the URL to include the current page number
+    paginated_url <- paste0(url, "?pageNumber=", page_number)
+   
+    try({
+      # Read the HTML of the current page
+      page_content <- read_html(paginated_url)
+     
+      # Extract all review sections from the page
+      review_elements <- page_content %>%
+        html_nodes(".review")
+     
+      # Extract reviewer names
+      reviewer_names_page <- review_elements %>%
+        html_nodes(".a-profile-name") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review dates
+      review_dates_page <- review_elements %>%
+        html_nodes(".review-date") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review comments
+      review_comments_page <- review_elements %>%
+        html_nodes(".review-text-content span") %>%
+        html_text(trim = TRUE)
+     
+      # Extract verified purchase labels
+      verified_purchases_page <- review_elements %>%
+        html_nodes(".review-vp-label") %>%
+        html_text(trim = TRUE)
+     
+      # Extract star ratings
+      star_ratings_page <- review_elements %>%
+        html_nodes(".a-icon-alt") %>%
+        html_text(trim = TRUE) %>%
+        str_extract("\\d\\.\\d") %>%  # Extract numeric rating (e.g., 4.5)
+        as.numeric()
+     
+      # Append the collected review data to the vectors
+      reviewer_names <- c(reviewer_names, reviewer_names_page)
+      review_dates <- c(review_dates, review_dates_page)
+      review_comments <- c(review_comments, review_comments_page)
+      verified_purchases <- c(verified_purchases, verified_purchases_page)
+      star_ratings <- c(star_ratings, star_ratings_page)
+     
+      # Increment the page number to fetch the next set of reviews
+      page_number <- page_number + 1
+    }, silent = TRUE)
+   
+    # Stop if we've collected at least 20 reviews
+    if(length(reviewer_names) >= 2) {
+      break
+    }
+  }
+ 
+  # Limit the data to the first 20 reviews (if more were collected)
+  max_reviews <- min(2, length(reviewer_names))
+  reviewer_names <- reviewer_names[1:max_reviews]
+  review_dates <- review_dates[1:max_reviews]
+  review_comments <- review_comments[1:max_reviews]
+  verified_purchases <- verified_purchases[1:max_reviews]
+  star_ratings <- star_ratings[1:max_reviews]
+ 
+  # Create a data frame for the current product's reviews with updated column names
+  product_reviews <- data.frame(
+    ProductCategory = rep(category_name, max_reviews),
+    ProductName = rep(product_title, max_reviews),
+    Reviewer = reviewer_names,
+    ReviewDate = review_dates,
+    Comment = review_comments,
+    Rating = star_ratings,
+    IsVerifiedPurchase = verified_purchases,
+    stringsAsFactors = FALSE
+  )
+ 
+  # Append the current product's reviews to the master data frame
+  all_product_reviews <- bind_rows(all_product_reviews, product_reviews)
+}
+```
+
+
+```{r}
+# Print the compiled reviews data
+print(all_product_reviews)
+```
+
+
+```{r}
+# Save the reviews to a CSV file for further analysis
+write.csv(all_product_reviews, "Watch_reviews.csv", row.names = FALSE)
+```
+
+```{r}
+# Define the list of product URLs and corresponding names
+product_urls <- c(
+ "https://www.amazon.com/Dr-Elseys-Premium-Clumping-Litter/dp/B0009X29WK/ref=sr_1_1",
+  "https://www.amazon.com/Veken-Innovation-Stainless-Automatic-Replacement/dp/B0CK1MXC7J/ref=sr_1_2",
+  "https://www.amazon.com/YVE-LIFE-Generation-Rechargeable-Interactive/dp/B0C7GMX4FT/ref=sr_1_3",
+  "https://www.amazon.com/Warming-Pets-Removable-Non-Slip-Washable/dp/B096S3QHWL/ref=sr_1_4",
+  "https://www.amazon.com/Flea-Prevention-Cats-Over-Advantage/dp/B004QBDO0M/ref=sr_1_5",
+  "https://www.amazon.com/PetSafe-ScoopFree-Automatic-Self-Cleaning-Litter/dp/B07WZPJ2LW/ref=sr_1_6",
+  "https://www.amazon.com/MILIFUN-Elevated-Tilted-Vomiting-Orthopedic/dp/B083VWG5RL/ref=sr_1_7",
+  "https://www.amazon.com/Potaroma-Crinkle-Durable-Interactive-Exercise/dp/B0C9QK9BZF/ref=sr_1_8",
+  "https://www.amazon.com/rabbitgoo-Adjustable-Harnesses-Breathable-Reflective/dp/B0C3QPZXFV/ref=sr_1_9",
+  "https://www.amazon.com/Andiker-Creative-Interactive-Colorful-Swatting/dp/B0839FGPFG/ref=sr_1_10"
+)
+
+product_titles <- c(
+  "Dr. Elsey's Cat Litter - Premium Unscented Cat Litter w/ Natural Ingredients",
+  "Veken Innovation Award Winner Stainless Steel Cat Water Fountain",
+  "Laser Cat Toys for Indoor Cats",
+  "Self Warming Cat Bed Self Heating Cat Dog Mat",
+  "Advantage II Large Cat Vet-Recommended Flea Treatment & Prevention",
+  "PetSafe ScoopFree Crystal Pro Self Cleaning Litter Box",
+  "MILIFUN Cat Food Bowls Elevated Tilted",
+  "Potaroma Cat Toys Saury Fish",
+  "rabbitgoo Cat Harness and Leash for Walking",
+  "Andiker Cat Spiral Spring"
+)
+```
+
+
+```{r}
+category_name <- "Cat Supplies"
+
+# Create an empty dataframe to store all reviews
+all_product_reviews <- data.frame()
+
+# Loop over each product URL
+for (idx in seq_along(product_urls)) {
+  url <- product_urls[idx]
+  product_title <- product_titles[idx]
+ 
+  # Initialize vectors to store individual review information for the current product
+  reviewer_names <- character()
+  review_dates <- character()
+  review_comments <- character()
+  verified_purchases <- character()
+  star_ratings <- numeric()
+ 
+  # Start scraping reviews, page by page
+  page_number <- 1
+  while(length(reviewer_names) < 2) {
+    # Modify the URL to include the current page number
+    paginated_url <- paste0(url, "?pageNumber=", page_number)
+   
+    try({
+      # Read the HTML of the current page
+      page_content <- read_html(paginated_url)
+     
+      # Extract all review sections from the page
+      review_elements <- page_content %>%
+        html_nodes(".review")
+     
+      # Extract reviewer names
+      reviewer_names_page <- review_elements %>%
+        html_nodes(".a-profile-name") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review dates
+      review_dates_page <- review_elements %>%
+        html_nodes(".review-date") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review comments
+      review_comments_page <- review_elements %>%
+        html_nodes(".review-text-content span") %>%
+        html_text(trim = TRUE)
+     
+      # Extract verified purchase labels
+      verified_purchases_page <- review_elements %>%
+        html_nodes(".review-vp-label") %>%
+        html_text(trim = TRUE)
+     
+      # Extract star ratings
+      star_ratings_page <- review_elements %>%
+        html_nodes(".a-icon-alt") %>%
+        html_text(trim = TRUE) %>%
+        str_extract("\\d\\.\\d") %>%  # Extract numeric rating (e.g., 4.5)
+        as.numeric()
+     
+      # Append the collected review data to the vectors
+      reviewer_names <- c(reviewer_names, reviewer_names_page)
+      review_dates <- c(review_dates, review_dates_page)
+      review_comments <- c(review_comments, review_comments_page)
+      verified_purchases <- c(verified_purchases, verified_purchases_page)
+      star_ratings <- c(star_ratings, star_ratings_page)
+     
+      # Increment the page number to fetch the next set of reviews
+      page_number <- page_number + 1
+    }, silent = TRUE)
+   
+    # Stop if we've collected at least 20 reviews
+    if(length(reviewer_names) >= 2) {
+      break
+    }
+  }
+ 
+  # Limit the data to the first 20 reviews (if more were collected)
+  max_reviews <- min(2, length(reviewer_names))
+  reviewer_names <- reviewer_names[1:max_reviews]
+  review_dates <- review_dates[1:max_reviews]
+  review_comments <- review_comments[1:max_reviews]
+  verified_purchases <- verified_purchases[1:max_reviews]
+  star_ratings <- star_ratings[1:max_reviews]
+ 
+  # Create a data frame for the current product's reviews with updated column names
+  product_reviews <- data.frame(
+    ProductCategory = rep(category_name, max_reviews),
+    ProductName = rep(product_title, max_reviews),
+    Reviewer = reviewer_names,
+    ReviewDate = review_dates,
+    Comment = review_comments,
+    Rating = star_ratings,
+    IsVerifiedPurchase = verified_purchases,
+    stringsAsFactors = FALSE
+  )
+ 
+  # Append the current product's reviews to the master data frame
+  all_product_reviews <- bind_rows(all_product_reviews, product_reviews)
+}
+```
+
+
+```{r}
+# Print the compiled reviews data
+print(all_product_reviews)
+```
+
+
+```{r}
+# Save the reviews to a CSV file for further analysis
+write.csv(all_product_reviews, "CatSupplies_Reviews.csv", row.names = FALSE)
+```
+
+```{r}
+# Define the list of product URLs and corresponding names
+product_urls <- c(
+  "https://www.amazon.com/Yoobure-Tree-Bookshelf-Standing-Organizer/dp/B0BQBZSK7F/ref=sr_1_1",
+  "https://www.amazon.com/SUPERJARE-Nightstand-Charging-Station-Adjustable/dp/B0BDFRN629/ref=sr_1_2",
+  "https://www.amazon.com/WLIVE-Dresser-Bedroom-Organization-Charcoal/dp/B09MVQZ7VM/ref=sr_1_3",
+  "https://www.amazon.com/MAXYOYO-Convertible-Foldable-Mattress-Portable/dp/B0D7HS6W6K/ref=sr_1_4",
+  "https://www.amazon.com/Lerliuo-Nightstand-Bedside-End-Bedroom/dp/B0BRQBVKBB/ref=sr_1_5",
+  "https://www.amazon.com/Industrial-Table-Lamps-Bedrooms-Set/dp/B0C3CMG9D8/ref=sr_1_6",
+  "https://www.amazon.com/Greenstell-Vanity-Stool-Chair-Storage/dp/B09YVC51NV/ref=sr_1_7",
+  "https://www.amazon.com/TRIFEBLE-Charging-Station-Bedside-Bedroom/dp/B0CQTDXXMW/ref=sr_1_8",
+  "https://www.amazon.com/WLIVE-Nightstand-Drawers，Bedside-Furniture-Rustic-Brown/dp/B0953928GW/ref=sr_1_9",
+  "https://www.amazon.com/SONGMICS-Storage-Foldable-Space-Saving-Capacity/dp/B07VCNJNB6/ref=sr_1_10"
+)
+
+product_titles <- c(
+   "Yoobure Tree Bookshelf - 6 Shelf Retro Floor Standing Bookcase",
+  "SUPERJARE Nightstand with Charging Station",
+  "WLIVE Dresser for Bedroom with 8 Drawers",
+  "MAXYOYO Folding Sofa Bed, Convertible Sleeper Chair with Pillow Foldable Mattress with Back Support",
+  "Lerliuo Rattan Nightstand, Boho Side Table with Drawer Open Shelf",
+  "Industrial Table Lamps for Bedrooms Set of 2 - Fully Dimmable Bedside Lamps with USB A and C Ports and Outlet",
+  "Greenstell Vanity Stool Chair Faux Fur with Storage",
+  "Night Stand Set 2, End Table with Charging Station",
+  "WLIVE Night Stand, Small 2 Drawer Dresser",
+  "SONGMICS 30 Inches Folding Storage Ottoman Bench, Storage Chest"
+)
+```
+
+
+```{r}
+category_name <- "Furnitures"
+
+# Create an empty dataframe to store all reviews
+all_product_reviews <- data.frame()
+
+# Loop over each product URL
+for (idx in seq_along(product_urls)) {
+  url <- product_urls[idx]
+  product_title <- product_titles[idx]
+ 
+  # Initialize vectors to store individual review information for the current product
+  reviewer_names <- character()
+  review_dates <- character()
+  review_comments <- character()
+  verified_purchases <- character()
+  star_ratings <- numeric()
+ 
+  # Start scraping reviews, page by page
+  page_number <- 1
+  while(length(reviewer_names) < 2) {
+    # Modify the URL to include the current page number
+    paginated_url <- paste0(url, "?pageNumber=", page_number)
+   
+    try({
+      # Read the HTML of the current page
+      page_content <- read_html(paginated_url)
+     
+      # Extract all review sections from the page
+      review_elements <- page_content %>%
+        html_nodes(".review")
+     
+      # Extract reviewer names
+      reviewer_names_page <- review_elements %>%
+        html_nodes(".a-profile-name") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review dates
+      review_dates_page <- review_elements %>%
+        html_nodes(".review-date") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review comments
+      review_comments_page <- review_elements %>%
+        html_nodes(".review-text-content span") %>%
+        html_text(trim = TRUE)
+     
+      # Extract verified purchase labels
+      verified_purchases_page <- review_elements %>%
+        html_nodes(".review-vp-label") %>%
+        html_text(trim = TRUE)
+     
+      # Extract star ratings
+      star_ratings_page <- review_elements %>%
+        html_nodes(".a-icon-alt") %>%
+        html_text(trim = TRUE) %>%
+        str_extract("\\d\\.\\d") %>%  # Extract numeric rating (e.g., 4.5)
+        as.numeric()
+     
+      # Append the collected review data to the vectors
+      reviewer_names <- c(reviewer_names, reviewer_names_page)
+      review_dates <- c(review_dates, review_dates_page)
+      review_comments <- c(review_comments, review_comments_page)
+      verified_purchases <- c(verified_purchases, verified_purchases_page)
+      star_ratings <- c(star_ratings, star_ratings_page)
+     
+      # Increment the page number to fetch the next set of reviews
+      page_number <- page_number + 1
+    }, silent = TRUE)
+   
+    # Stop if we've collected at least 20 reviews
+    if(length(reviewer_names) >= 2) {
+      break
+    }
+  }
+ 
+  # Limit the data to the first 20 reviews (if more were collected)
+  max_reviews <- min(2, length(reviewer_names))
+  reviewer_names <- reviewer_names[1:max_reviews]
+  review_dates <- review_dates[1:max_reviews]
+  review_comments <- review_comments[1:max_reviews]
+  verified_purchases <- verified_purchases[1:max_reviews]
+  star_ratings <- star_ratings[1:max_reviews]
+ 
+  # Create a data frame for the current product's reviews with updated column names
+  product_reviews <- data.frame(
+    ProductCategory = rep(category_name, max_reviews),
+    ProductName = rep(product_title, max_reviews),
+    Reviewer = reviewer_names,
+    ReviewDate = review_dates,
+    Comment = review_comments,
+    Rating = star_ratings,
+    IsVerifiedPurchase = verified_purchases,
+    stringsAsFactors = FALSE
+  )
+ 
+  # Append the current product's reviews to the master data frame
+  all_product_reviews <- bind_rows(all_product_reviews, product_reviews)
+}
+```
+
+
+```{r}
+# Print the compiled reviews data
+print(all_product_reviews)
+```
+
+
+```{r}
+# Save the reviews to a CSV file for further analysis
+write.csv(all_product_reviews, "Furnitures.csv", row.names = FALSE)
+```
+
+```{r}
+# Define the list of product URLs and corresponding names
+product_urls <- c(
+"https://www.amazon.com/INIU-Wireless-Qi-Certified-Sleep-Friendly-Compatible/dp/B08LVSFN4X/ref=sr_1_1",
+  "https://www.amazon.com/LISEN-Retractable-Charger-Charging-Accessories/dp/B0D4215HCX/ref=sr_1_2",
+  "https://www.amazon.com/VANMASS%E3%80%902023-Strongest-Military-Grade-Mount%E3%80%90Patent-Handsfree/dp/B07G61YN8K/ref=sr_1_3",
+  "https://www.amazon.com/Miracase-Holders-Universal-Automobile-Smartphones/dp/B0CHYBKQPM/ref=sr_1_4",
+  "https://www.amazon.com/PopSockets-Compatible-Included-Wireless-Charging/dp/B0CDF5M6TW/ref=sr_1_5",
+  "https://www.amazon.com/PopSockets-PopGrip-Swappable-Phones-Tablets/dp/B07P29XQR4/ref=sr_1_6",
+  "https://www.amazon.com/iOttie-Universal-Dashboard-Windshield-Smartphones/dp/B0C1HP8N5D/ref=sr_1_7",
+  "https://www.amazon.com/Charger-Charging%E3%80%90MFi-Certified%E3%80%91-Lightning-Compatible/dp/B0CN6GHGD6/ref=sr_1_8",
+  "https://www.amazon.com/Nulaxy-Foldable-Compatible-Nintendo-Readers/dp/B07F8S18D5/ref=sr_1_9",
+  "https://www.amazon.com/Qifutan-Windshield-Dashboard-Automobile-Smartphone/dp/B0CHS69JW3/ref=sr_1_10"
+)
+
+product_titles <- c(
+  "INIU Wireless Charger",
+  "LISEN Retractable Car Charger 4 in 1",
+  "VANMASS 【65+LBS Strongest Suction & Military-Grade 2024 Ultimate Car Phone Mount",
+  "Miracase Phone Holders for Your Car with Metal Hook Clip",
+  "PopSockets Phone Grip Compatible with MagSafe",
+  "PopSockets Phone Grip with Expanding Kickstand",
+  "iOttie Easy One Touch 6 Universal Car Mount Dashboard",
+  "iPhone Charger Fast Charging",
+  "Nulaxy Dual Folding Cell Phone Stand",
+  "Qifutan Car Phone Holder Mount Phone Mount"
+)
+```
+
+
+```{r}
+category_name <- "Cellphone Accessories"
+
+# Create an empty dataframe to store all reviews
+all_product_reviews <- data.frame()
+
+# Loop over each product URL
+for (idx in seq_along(product_urls)) {
+  url <- product_urls[idx]
+  product_title <- product_titles[idx]
+ 
+  # Initialize vectors to store individual review information for the current product
+  reviewer_names <- character()
+  review_dates <- character()
+  review_comments <- character()
+  verified_purchases <- character()
+  star_ratings <- numeric()
+ 
+  # Start scraping reviews, page by page
+  page_number <- 1
+  while(length(reviewer_names) < 2) {
+    # Modify the URL to include the current page number
+    paginated_url <- paste0(url, "?pageNumber=", page_number)
+   
+    try({
+      # Read the HTML of the current page
+      page_content <- read_html(paginated_url)
+     
+      # Extract all review sections from the page
+      review_elements <- page_content %>%
+        html_nodes(".review")
+     
+      # Extract reviewer names
+      reviewer_names_page <- review_elements %>%
+        html_nodes(".a-profile-name") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review dates
+      review_dates_page <- review_elements %>%
+        html_nodes(".review-date") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review comments
+      review_comments_page <- review_elements %>%
+        html_nodes(".review-text-content span") %>%
+        html_text(trim = TRUE)
+     
+      # Extract verified purchase labels
+      verified_purchases_page <- review_elements %>%
+        html_nodes(".review-vp-label") %>%
+        html_text(trim = TRUE)
+     
+      # Extract star ratings
+      star_ratings_page <- review_elements %>%
+        html_nodes(".a-icon-alt") %>%
+        html_text(trim = TRUE) %>%
+        str_extract("\\d\\.\\d") %>%  # Extract numeric rating (e.g., 4.5)
+        as.numeric()
+     
+      # Append the collected review data to the vectors
+      reviewer_names <- c(reviewer_names, reviewer_names_page)
+      review_dates <- c(review_dates, review_dates_page)
+      review_comments <- c(review_comments, review_comments_page)
+      verified_purchases <- c(verified_purchases, verified_purchases_page)
+      star_ratings <- c(star_ratings, star_ratings_page)
+     
+      # Increment the page number to fetch the next set of reviews
+      page_number <- page_number + 1
+    }, silent = TRUE)
+   
+    # Stop if we've collected at least 20 reviews
+    if(length(reviewer_names) >= 2) {
+      break
+    }
+  }
+ 
+  # Limit the data to the first 20 reviews (if more were collected)
+  max_reviews <- min(2, length(reviewer_names))
+  reviewer_names <- reviewer_names[1:max_reviews]
+  review_dates <- review_dates[1:max_reviews]
+  review_comments <- review_comments[1:max_reviews]
+  verified_purchases <- verified_purchases[1:max_reviews]
+  star_ratings <- star_ratings[1:max_reviews]
+ 
+  # Create a data frame for the current product's reviews with updated column names
+  product_reviews <- data.frame(
+    ProductCategory = rep(category_name, max_reviews),
+    ProductName = rep(product_title, max_reviews),
+    Reviewer = reviewer_names,
+    ReviewDate = review_dates,
+    Comment = review_comments,
+    Rating = star_ratings,
+    IsVerifiedPurchase = verified_purchases,
+    stringsAsFactors = FALSE
+  )
+ 
+  # Append the current product's reviews to the master data frame
+  all_product_reviews <- bind_rows(all_product_reviews, product_reviews)
+}
+```
+
+
+```{r}
+# Print the compiled reviews data
+print(all_product_reviews)
+```
+
+
+```{r}
+# Save the reviews to a CSV file for further analysis
+write.csv(all_product_reviews, "CellphoneAccessories_Reviews.csv", row.names = FALSE)
+```
+
+```{r}
+# Define the list of product URLs and corresponding names
+product_urls <- c(
+  "https://www.amazon.com/Portable-Exercise-Equipment-Accessories-Resistance/dp/B0CRR1XXC4/ref=sr_1_1",
+  "https://www.amazon.com/Jugana-Indoor-Basketball-Scoreboard-Batteries/dp/B0CQYLM31Q/ref=sr_1_2",
+  "https://www.amazon.com/Boxbollen-Original-Used-Celebrities-Coordination/dp/B0BZ8MB4KM/ref=sr_1_3",
+  "https://www.amazon.com/NERF-Mini-Foam-Sports-Ball/dp/B09GNQD678/ref=sr_1_4",
+  "https://www.amazon.com/GoSports-Slammo-Balls-Carrying-Rules/dp/B00K8ANYZU/ref=sr_1_5",
+  "https://www.amazon.com/Scholastic-Year-Sports-James-Buckley/dp/1339011328/ref=sr_1_6",
+  "https://www.amazon.com/Under-Armour-Playmaker-Insulated-Resistant/dp/B0BT8K88SR/ref=sr_1_7",
+  "https://www.amazon.com/Jazzminton-Sport-Boundaries-Pickleball-Badminton/dp/B09MDTL3G1/ref=sr_1_8",
+  "https://www.amazon.com/Hockey-Soccer-Rechargeable-Floating-Outdoor/dp/B07RWWH2L4/ref=sr_1_9",
+  "https://www.amazon.com/CEILING-SPORT-Ceiling-Indoor-Basketball/dp/B07GXDS9PB/ref=sr_1_10"
+)
+
+product_titles <- c(
+  "Push Up Board,Home Gym,Portable Exercise Equipment",
+  "Mini Basketball Hoop Indoor with Scorer and Batteries",
+  "Original with App, Used by Celebrities - MMA Gear Boxing Ball",
+  "Nerf Mini Foam Sports Ball Set",
+  "GoSports Slammo Game Set",
+  "Scholastic Year in Sports 2024",
+  "Under Armour Half Gallon Water Bottle Insulated",
+  "Sport - Indoor & Outdoor, No Boundaries- Similar to Pickleball",
+  "Hover Hockey Set for Kids",
+  "Ceiling Swish: Indoor Mini Basketball Hoop for Kids Toy Game"
+)
+```
+
+
+```{r}
+category_name <- "Sports"
+
+# Create an empty dataframe to store all reviews
+all_product_reviews <- data.frame()
+
+# Loop over each product URL
+for (idx in seq_along(product_urls)) {
+  url <- product_urls[idx]
+  product_title <- product_titles[idx]
+ 
+  # Initialize vectors to store individual review information for the current product
+  reviewer_names <- character()
+  review_dates <- character()
+  review_comments <- character()
+  verified_purchases <- character()
+  star_ratings <- numeric()
+ 
+  # Start scraping reviews, page by page
+  page_number <- 1
+  while(length(reviewer_names) < 2) {
+    # Modify the URL to include the current page number
+    paginated_url <- paste0(url, "?pageNumber=", page_number)
+   
+    try({
+      # Read the HTML of the current page
+      page_content <- read_html(paginated_url)
+     
+      # Extract all review sections from the page
+      review_elements <- page_content %>%
+        html_nodes(".review")
+     
+      # Extract reviewer names
+      reviewer_names_page <- review_elements %>%
+        html_nodes(".a-profile-name") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review dates
+      review_dates_page <- review_elements %>%
+        html_nodes(".review-date") %>%
+        html_text(trim = TRUE)
+     
+      # Extract review comments
+      review_comments_page <- review_elements %>%
+        html_nodes(".review-text-content span") %>%
+        html_text(trim = TRUE)
+     
+      # Extract verified purchase labels
+      verified_purchases_page <- review_elements %>%
+        html_nodes(".review-vp-label") %>%
+        html_text(trim = TRUE)
+     
+      # Extract star ratings
+      star_ratings_page <- review_elements %>%
+        html_nodes(".a-icon-alt") %>%
+        html_text(trim = TRUE) %>%
+        str_extract("\\d\\.\\d") %>%  # Extract numeric rating (e.g., 4.5)
+        as.numeric()
+     
+      # Append the collected review data to the vectors
+      reviewer_names <- c(reviewer_names, reviewer_names_page)
+      review_dates <- c(review_dates, review_dates_page)
+      review_comments <- c(review_comments, review_comments_page)
+      verified_purchases <- c(verified_purchases, verified_purchases_page)
+      star_ratings <- c(star_ratings, star_ratings_page)
+     
+      # Increment the page number to fetch the next set of reviews
+      page_number <- page_number + 1
+    }, silent = TRUE)
+   
+    # Stop if we've collected at least 20 reviews
+    if(length(reviewer_names) >= 2) {
+      break
+    }
+  }
+ 
+  # Limit the data to the first 20 reviews (if more were collected)
+  max_reviews <- min(2, length(reviewer_names))
+  reviewer_names <- reviewer_names[1:max_reviews]
+  review_dates <- review_dates[1:max_reviews]
+  review_comments <- review_comments[1:max_reviews]
+  verified_purchases <- verified_purchases[1:max_reviews]
+  star_ratings <- star_ratings[1:max_reviews]
+ 
+  # Create a data frame for the current product's reviews with updated column names
+  product_reviews <- data.frame(
+    ProductCategory = rep(category_name, max_reviews),
+    ProductName = rep(product_title, max_reviews),
+    Reviewer = reviewer_names,
+    ReviewDate = review_dates,
+    Comment = review_comments,
+    Rating = star_ratings,
+    IsVerifiedPurchase = verified_purchases,
+    stringsAsFactors = FALSE
+  )
+ 
+  # Append the current product's reviews to the master data frame
+  all_product_reviews <- bind_rows(all_product_reviews, product_reviews)
+}
+```
+
+
+```{r}
+# Print the compiled reviews data
+print(all_product_reviews)
+```
+
+
+```{r}
+# Save the reviews to a CSV file for further analysis
+write.csv(all_product_reviews, "Sports_Reviews.csv", row.names = FALSE)
+```
